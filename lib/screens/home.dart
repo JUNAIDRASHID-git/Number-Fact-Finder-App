@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:numberfactfinder/widgets/Bars/home_app_bar.dart';
 import 'package:numberfactfinder/widgets/TextFields/number_text_field.dart';
-import 'package:numberfactfinder/widgets/containers/fact_result_container.dart';
 import 'package:numberfactfinder/widgets/buttons/send_button.dart';
+import 'package:numberfactfinder/widgets/containers/fact_result_container.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  TextEditingController inputText = TextEditingController();
+  String? triviaText;
+
+  void updateTriviaText(String newText) {
+    setState(() {
+      triviaText = newText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 60,
-        title: const Text(
-          "Number Fact Finder",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: homeAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          factResultContainer(context),
-          Row(children: [numberTextField(), sendButton()]),
+          factResultContainer(context, triviaText),
+          Row(children: [
+            numberTextField(inputText),
+            sendButton(updateTriviaText, inputText, context)
+          ])
         ],
       ),
     );
